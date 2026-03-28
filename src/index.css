@@ -73,6 +73,18 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
   }
+
+  /* Fix CSS warnings for vendor prefixes */
+  input, select, textarea, button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Ensure line-clamp utilities have standard properties */
+  .line-clamp-1, .line-clamp-2, .line-clamp-3 {
+    -webkit-line-clamp: inherit;
+    line-clamp: inherit;
+  }
 }
 
 @layer components {
