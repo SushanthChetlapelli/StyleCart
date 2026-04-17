@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
+import User from './models/User.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,7 +13,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config();
 
 const mongoUri =
-  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/stylecart';
+  process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/stylecart';
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// MongoDB Connection — Compass must use the SAME URI as MONGODB_URI (see server/.env).
+// MongoDB Connection — Compass must use the SAME URI as MONGO_URI (see server/.env).
 // User accounts are stored in database from the URI path (e.g. stylecart) → collection "users".
 // Passwords are bcrypt hashes in DB; plain text is never stored.
 mongoose.connect(mongoUri)
@@ -42,6 +43,42 @@ mongoose.connect(mongoUri)
           '" → "users" (accounts), "login_activity" (each signup/login).'
       );
     }
+
+    // Ensure admin user exists for admin login
+    (async () => {
+      try {
+        const adminEmail = process.env.ADMIN_EMAIL || 'sushanthch606@gmail.com';
+        const adminPassword = process.env.ADMIN_PASSWORD || 'sushanth1803';
+        const adminName = process.env.ADMIN_FULL_NAME || 'Admin';
+
+        let admin = await User.findOne({ role: 'admin' });
+
+        if (!admin) {
+          admin = new User({
+            email: adminEmail,
+            password: adminPassword,
+            full_name: adminName,
+            role: 'admin',
+            verified: true,
+          });
+          await admin.save();
+          console.log(`Admin user created: ${adminEmail}`);
+        } else {
+          const passwordMatches = await admin.matchPassword(adminPassword);
+          if (admin.email !== adminEmail || !passwordMatches || admin.full_name !== adminName) {
+            admin.email = adminEmail;
+            admin.password = adminPassword;
+            admin.full_name = adminName;
+            await admin.save();
+            console.log(`Admin user synced with env values: ${adminEmail}`);
+          } else {
+            console.log(`Admin user already up-to-date: ${adminEmail}`);
+          }
+        }
+      } catch (seedErr) {
+        console.error('Admin seed error:', seedErr);
+      }
+    })();
   })
   .catch((err) => {
     console.error('MongoDB connection error:', err);
