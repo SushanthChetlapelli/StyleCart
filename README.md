@@ -1,8 +1,9 @@
 ## TEAM DETAILS:
+```
 1.Ch.Nithin Reddy-2303A51550
 2.Ch.Sushanth-2303A51750
 3.M.Sathvik-2303A51483
-
+```
 
 ## Project Structure:
 ```
