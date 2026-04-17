@@ -5,7 +5,7 @@
 
 
 ## Project Structure:
-
+```
  DEVOPS/
 ├── src/
 │   ├── pages/             # All route-level page components
@@ -50,10 +50,11 @@
 ├── docker-compose.yml     → Docker setup
 ├── .env                   → Environment variables
 └── package.json
-
+```
 
 
 ## Navigation Flowchart:
+```
 
 ┌─────────────────────────────────────────────────────────────┐
 │                        ENTRY POINTS                         │
@@ -194,7 +195,7 @@ USER DASHBOARD (Authenticated users only)
 404 FALLBACK
 ────────────
   Any unmatched URL → /not-found (NotFound page)
-
+```
 
 
 ## Setup & Installation
@@ -234,7 +235,7 @@ bashnpm run build
 # Output goes to /dist
 
 ## Authentication Flow:
-
+```
 User clicks "Sign In" (Navbar)
         │
         ▼
@@ -252,10 +253,11 @@ User state updated → Navbar shows User + Logout icons
    ┌────┴─────┐
    ▼          ▼
 /user-dashboard  Auto-fill checkout form
+```
 
 
 ## Cart Flow :
-
+```
 Product Page → [Add to Cart]
         │
         ▼
@@ -274,7 +276,7 @@ CartContext.clearCart()
         │
         ▼
 OrderSuccessPage (/order-success?order=SC-xxxx)
-
+```
 
 ## 🛠️ Tech Stack
 
